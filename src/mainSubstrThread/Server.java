@@ -140,6 +140,7 @@ class Handler implements Runnable
     private static final int READ = 1;
     private static final int WRITE = 2;
     private int state;
+    // 每一个msg由一个独立的Handler管理, 所以不会出现信息错乱
     private String msg;
     private ExecutorService executorService = Executors.newFixedThreadPool(6);
 
