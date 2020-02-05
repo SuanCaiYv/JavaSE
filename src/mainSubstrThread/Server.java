@@ -17,6 +17,11 @@ import java.util.concurrent.*;
  */
 public class Server
 {
+    /**
+     * 两个轮询器, 一个负责监听, 一个处理IO事件
+     * IO事件处理利用线程池实现多线程
+     * 两个轮询器由两个线程开辟运行
+     */
     private Selector bossSelector;
     private Selector workSelector;
     private ExecutorService executorService = Executors.newFixedThreadPool(2);
