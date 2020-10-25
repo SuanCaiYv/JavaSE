@@ -70,10 +70,16 @@ class BossSelector implements Runnable
             while (true) {
                 bossSelector.select();
                 Set<SelectionKey> selectionKeys = bossSelector.selectedKeys();
+                List<SelectionKey> list = new ArrayList<>(selectionKeys.size());
                 for (SelectionKey selectionKey : selectionKeys) {
                     Server.dispatch(selectionKey);
+                    list.add(selectionKey);
                 }
-                selectionKeys.clear();
+                // 清空已处理过的SelectionKey
+                for (SelectionKey selectionKey : list) {
+                    selectionKeys.remove(selectionKey);
+                }
+                // 直接clear()似乎有点不太合适，因为如果在处理时又有新的Key那不也给清空了吗？
                 bossSelector.wakeup();
             }
         } catch (IOException e) {
@@ -97,10 +103,16 @@ class WorkSelector implements Runnable
             while (true) {
                 workSelector.select();
                 Set<SelectionKey> selectionKeys = workSelector.selectedKeys();
+                List<SelectionKey> list = new ArrayList<>(selectionKeys.size());
                 for (SelectionKey selectionKey : selectionKeys) {
                     Server.dispatch(selectionKey);
+                    list.add(selectionKey);
                 }
-                selectionKeys.clear();
+                // 清空已处理过的SelectionKey
+                for (SelectionKey selectionKey : list) {
+                    selectionKeys.remove(selectionKey);
+                }
+                // 直接clear()似乎有点不太合适，因为如果在处理时又有新的Key那不也给清空了吗？
             }
         } catch (IOException e) {
             e.printStackTrace();
